@@ -10,7 +10,7 @@ Can you help them do that in Amazon API Gateway & AWS Lambda?
 
 We can do this by using API Gateway stage variables ([ReST API][8] & [HTTP API][9]) and Lambda function [alias](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html) without creating environment-wise redundant Lambda functions. In short, different Lambda alias, like `TEST` and `PROD` can be used as two different deployment targets for the Lambda function. When it comes to API Gateway, the [AWS Best Practice][10] here is to use different accounts or independant deployments of APIs for multiple environment like `dev`, `test` or `prod`.
 
-![Miztiik Automation API Best Practices: Highly Performant Design - API Keys | Rate Limiting with Usage Plan](images/miztiik_api_with_stage_variables_architecture_00.png)
+![Miztiik Automation API Best Practices: Highly Performant Design - API Keys | Rate Limiting with Usage Plan](images/miztiik_api_with_stage_variables_architecture_01.png)
 
 In this article, we will build an architecture, similar to the one shown above - A simple API using API Gateway which will trigger a Lambda function. We will have an stageVariable `lambdaAlias` and lets assume it is going to be an `prod` environment. The lambda will have multiple alias point at different stage of development. `prod` pointing to the most stable version and `dev` pointing to the bleeding edlge version.
 
