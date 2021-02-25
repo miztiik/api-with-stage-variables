@@ -258,36 +258,16 @@ class ApiWithStageVariablesStack(core.Stack):
         )
         """
 
-        greeter_fn.add_permission(
-            "allowStageInvocation",
-            principal=_iam.ServicePrincipal("apigateway.amazonaws.com"),
-            # source_arn=f"arn:aws:execute-api:{core.Aws.REGION}:{core.Aws.ACCOUNT_ID}:{wa_api.rest_api_id}/{dev_api_stage.stage_name}/{greeter_method_get.resource.path}"
-            source_arn=greeter_method_get.method_arn.replace(
-                wa_api.deployment_stage.stage_name, "*"),
-            action="lambda:InvokeFunction",
-
-        )
-
-        greeter_fn_dev_alias.add_permission(
-            "greeter_fn_devAliasApiPerms",
-            principal=_iam.ServicePrincipal("apigateway.amazonaws.com"),
-            action="lambda:InvokeFunction",
-            source_arn=greeter_method_get.method_arn.replace(
-                wa_api.deployment_stage.stage_name, "*"),
-        )
-        greeter_fn_test_alias.add_permission(
-            "greeter_fn_testAliasApiPerms",
-            principal=_iam.ServicePrincipal("apigateway.amazonaws.com"),
-            action="lambda:InvokeFunction",
-            source_arn=greeter_method_get.method_arn.replace(
-                wa_api.deployment_stage.stage_name, "*"),
-        )
-        greeter_fn_prod_alias.add_permission(
-            "greeter_fn_prodAliasApiPerms",
-            principal=_iam.ServicePrincipal("apigateway.amazonaws.com"),
-            action="lambda:InvokeFunction",
-            source_arn=greeter_method_get.method_arn.replace(
-                wa_api.deployment_stage.stage_name, "*"),
+        map(
+            lambda item: item.add_permission(
+                f'{item.id}_perms',
+                principal=_iam.ServicePrincipal("apigateway.amazonaws.com"),
+                source_arn=greeter_method_get.method_arn.replace(
+                    wa_api.deployment_stage.stage_name, '*'
+                ),
+                action="lambda:InvokeFunction"     
+            ), 
+            [greeter_fn, greeter_fn_dev_alias, greeter_fn_test_alias, greeter_fn_prod_alias]
         )
 
         # Outputs
